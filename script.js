@@ -30,7 +30,7 @@ const gameFunctions = (function() {
     let roundNo = 1;
     const getRoundNo = () => roundNo;
     const increaseRoundNo = () => {roundNo++; };
-    const resetRoundNo = () => {roundNo = 0; };
+    const resetRoundNo = () => {roundNo = 1; };
 
     const createPlayer = (marker) => {
         return {marker}
@@ -48,15 +48,14 @@ const gameFunctions = (function() {
         if (getGameBoard()[posPlayed] === undefined) {
             setGameBoard(posPlayed, player.marker);
             if (checkWin(player, posPlayed)) {
-                gameFunctions.declareWinner(player);
+                domController.declareWinner(player);
             }
             increaseRoundNo();
             if (getRoundNo() === 10) {
-                declareWinner(undefined, true);
+                domController.declareWinner(undefined, true);
             }
         } else {
-            alert("That square is taken");
-            playTurn(player); // Lets the player try again if selecting an invalid cell
+            return; // Lets the player try again if selecting an invalid cell
         }
     };
     const checkStraightWin = (linePlayed, player) => {
@@ -99,18 +98,11 @@ const gameFunctions = (function() {
             return true;
         }
     };
-    const declareWinner = (player, draw) => {
-        if (draw) {
-            console.log("It's a draw");
-        } else {
-            console.log(`Player ${player.marker} won`);
-        }   
-    };
     const resetBoard = () => {
         resetGameBoard();
         resetRoundNo();
     };
-    return {getGameBoard, setGameBoard, resetGameBoard, getRoundNo, increaseRoundNo, resetRoundNo, createPlayer, playTurn, checkStraightWin, checkDiagonalWin, checkWin, declareWinner, resetBoard};
+    return {getGameBoard, setGameBoard, resetGameBoard, getRoundNo, increaseRoundNo, resetRoundNo, createPlayer, playTurn, checkStraightWin, checkDiagonalWin, checkWin, resetBoard};
 })()
 
 const domController = (function() {
@@ -118,16 +110,31 @@ const domController = (function() {
     const titleDescription = document.querySelector("strong")
     cells.forEach(cell => {
         cell.addEventListener("click", () => {
-            if (gameFunctions.getRoundNo() % 2 === 0) {
-                cell.textContent = "O";
-                titleDescription.textContent = "X";
-            } else {
-                cell.textContent = "X";
-                titleDescription.textContent = "O";
+            if (gameFunctions.getGameBoard()[cell.getAttribute("id")] === undefined) {
+                if (gameFunctions.getRoundNo() % 2 === 0) {
+                    cell.textContent = "O";
+                    titleDescription.textContent = "X";
+                } else {
+                    cell.textContent = "X";
+                    titleDescription.textContent = "O";
+                }
+                gameFunctions.playTurn(cell.getAttribute("id"));
             }
-            gameFunctions.playTurn(cell.getAttribute("id"));
         })
     });
+
+    const dialog = document.querySelector("dialog")
+    const winText = document.querySelector("#winText")
+
+    const declareWinner = (player, draw) => {
+        if (draw) {
+            winText.textContent = "It's a Draw";
+        } else {
+            winText.textContent = `Player ${player.marker} Wins!`;
+        }
+        dialog.showModal();
+    };
+    return {declareWinner}
 })()
 
 const playerX = gameFunctions.createPlayer("X");
