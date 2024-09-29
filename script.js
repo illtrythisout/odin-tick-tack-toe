@@ -2,6 +2,32 @@ const gameFunctions = (function() {
     const createPlayer = (marker) => {
         return {marker}
     }
+    const nextRound = () => {
+        if (roundNo === 9) {
+            declareWinner(undefined, true);
+        } else {
+            roundNo++;
+            if (roundNo % 2 === 0) {
+                playTurn(playerO)
+            } else {
+                playTurn(playerX)
+            }
+        }
+    }
+    const playTurn = (player) => {
+        let posPlayed = prompt(`Player: ${player.marker}, select a square`);
+        if (gameBoard[posPlayed] === undefined) {
+            gameBoard[posPlayed] = player.marker;
+            if (checkWin(player, posPlayed)) {
+                gameFunctions.declareWinner(player);
+            } else {
+                nextRound();
+            }
+        } else {
+            alert("That square is taken");
+            playTurn(player);
+        }
+    }
     const checkStraightWin = (linePlayed, player) => {
         lineArr = [];
 
@@ -29,38 +55,37 @@ const gameFunctions = (function() {
             return true;
         }
     }
+    const checkWin = (player, posPlayed) => {
+        let rowPlayed = posPlayed[0];
+        let colPlayed = posPlayed[1]
+        if (
+            (checkStraightWin(rowPlayed, player)) || (checkStraightWin(colPlayed, player)) || (checkDiagonalWin(player))
+        ) {
+            return true;
+        }
+    }
     const declareWinner = (player, draw) => {
         if (draw) {
             console.log("It's a draw");
-            gameBoard = {
-                a1: undefined,
-                b1: undefined,
-                c1: undefined,
-                a2: undefined,
-                b2: undefined,
-                c2: undefined,
-                a3: undefined,
-                b3: undefined,
-                c3: undefined,
-            };
-            roundNo = 0;
         } else {
             console.log(`Player ${player.marker} won`);
-            gameBoard = {
-                a1: undefined,
-                b1: undefined,
-                c1: undefined,
-                a2: undefined,
-                b2: undefined,
-                c2: undefined,
-                a3: undefined,
-                b3: undefined,
-                c3: undefined,
-            };
-            roundNo = 0
         }   
     }
-    return {createPlayer, checkStraightWin, checkDiagonalWin, declareWinner};
+    const resetBoard = () => {
+        gameBoard = {
+            a1: undefined,
+            b1: undefined,
+            c1: undefined,
+            a2: undefined,
+            b2: undefined,
+            c2: undefined,
+            a3: undefined,
+            b3: undefined,
+            c3: undefined,
+        };
+        roundNo = 0
+    }
+    return {createPlayer, nextRound, playTurn, checkStraightWin, checkDiagonalWin, checkWin, declareWinner, resetBoard};
 })()
 
 const playerX = gameFunctions.createPlayer("X");
@@ -79,40 +104,3 @@ let gameBoard = {
 };
 
 let roundNo = 0;
-function nextRound() {
-    if (roundNo === 9) {
-        gameFunctions.declareWinner(undefined, true);
-    } else {
-        roundNo++;
-        if (roundNo % 2 === 0) {
-            playTurn(playerO)
-        } else {
-            playTurn(playerX)
-        }
-    }
-}
-
-function checkWin(player, posPlayed) {
-    let rowPlayed = posPlayed[0];
-    let colPlayed = posPlayed[1]
-    if (
-        (gameFunctions.checkStraightWin(rowPlayed, player)) || (gameFunctions.checkStraightWin(colPlayed, player)) || (gameFunctions.checkDiagonalWin(player))
-    ) {
-        return true;
-    }
-}
-
-function playTurn(player) {
-    let posPlayed = prompt(`Player: ${player.marker}, select a square`);
-    if (gameBoard[posPlayed] === undefined) {
-        gameBoard[posPlayed] = player.marker;
-        if (checkWin(player, posPlayed)) {
-            gameFunctions.declareWinner(player);
-        } else {
-            nextRound();
-        }
-    } else {
-        alert("That square is taken");
-        playTurn(player);
-    }
-}
