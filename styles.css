@@ -24,6 +24,7 @@ input, button, textarea, select {
   --default-padding: 2rem;
   --main-color: #1e293b;
   --cell-size: 8rem;
+  --cell-border-size: 0.125rem;
 }
 
 @font-face {
@@ -74,7 +75,26 @@ h1 {
 .cell {
   height: var(--cell-size);
   width: var(--cell-size);
-  background-color: aquamarine;
+}
+.top {
+  border-bottom: var(--cell-border-size) solid var(--main-color);
+}
+.middleRow {
+  border-top: var(--cell-border-size) solid var(--main-color);
+  border-bottom: var(--cell-border-size) solid var(--main-color);
+}
+.bottom {
+  border-top: var(--cell-border-size) solid var(--main-color);
+}
+.left {
+  border-right: var(--cell-border-size) solid var(--main-color);
+}
+.middleCol {
+  border-left: var(--cell-border-size) solid var(--main-color);
+  border-right: var(--cell-border-size) solid var(--main-color);
+}
+.right {
+  border-left: var(--cell-border-size) solid var(--main-color);
 }
 
 footer {
