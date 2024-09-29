@@ -1,3 +1,26 @@
+const gameFunctions = (function() {
+    const checkStraightWin = (linePlayed, player) => {
+        lineArr = [];
+
+        let propertyPosition;
+        if (isNaN(linePlayed) === true) {
+            propertyPosition = 0;
+        } else {
+            propertyPosition = 1;
+        }
+
+        for (let property in gameBoard) {
+            line = property[propertyPosition];
+            if (line === linePlayed && gameBoard[property] === player.marker) {
+                lineArr.push(property);
+            }
+        }
+        if (lineArr.length === 3) {return true}
+    }
+
+    return {checkStraightWin}
+})()
+
 function createPlayer(marker) {
     let score = 0
     const getScore = () => score
@@ -18,7 +41,7 @@ function declareWinner(player, draw) {
 
 let roundNo = 0;
 function nextRound() {
-    if (roundNo = 9) {
+    if (roundNo === 9) {
         declareWinner(undefined, true);
     } else {
         roundNo++;
@@ -43,8 +66,13 @@ const gameBoard = {
 }
 
 function checkWin(player, posPlayed) {
-    let row = posPlayed[0]
-    console.log(row)
+    let rowPlayed = posPlayed[0];
+    let colPlayed = posPlayed[1]
+    if (gameFunctions.checkStraightWin(rowPlayed, player)) {
+        declareWinner(player);
+    } else if (gameFunctions.checkStraightWin(colPlayed, player)) {
+        declareWinner(player)
+    }
 }
 
 function playTurn(player) {
