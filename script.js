@@ -18,7 +18,17 @@ const gameFunctions = (function() {
         if (lineArr.length === 3) {return true}
     }
 
-    return {checkStraightWin}
+    const checkDiagonalWin = (player) => {
+        if (
+            (gameBoard.a1 === player.marker && gameBoard.b2 === player.marker && gameBoard.c3 === player.marker)
+            ||
+            (gameBoard.c1 === player.marker && gameBoard.b2 === player.marker && gameBoard.a3 === player.marker)
+        ) {
+            return true;
+        }
+    }
+
+    return {checkStraightWin, checkDiagonalWin}
 })()
 
 function createPlayer(marker) {
@@ -68,9 +78,9 @@ const gameBoard = {
 function checkWin(player, posPlayed) {
     let rowPlayed = posPlayed[0];
     let colPlayed = posPlayed[1]
-    if (gameFunctions.checkStraightWin(rowPlayed, player)) {
-        return true;
-    } else if (gameFunctions.checkStraightWin(colPlayed, player)) {
+    if (
+        (gameFunctions.checkStraightWin(rowPlayed, player)) || (gameFunctions.checkStraightWin(colPlayed, player)) || (gameFunctions.checkDiagonalWin(player))
+    ) {
         return true;
     }
 }
