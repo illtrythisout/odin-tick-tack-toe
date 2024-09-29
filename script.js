@@ -46,9 +46,9 @@ function nextRound() {
     } else {
         roundNo++;
         if (roundNo % 2 === 0) {
-            playTurn("X")
+            playTurn(playerO)
         } else {
-            playTurn("O")
+            playTurn(playerX)
         }
     }
 }
@@ -69,9 +69,9 @@ function checkWin(player, posPlayed) {
     let rowPlayed = posPlayed[0];
     let colPlayed = posPlayed[1]
     if (gameFunctions.checkStraightWin(rowPlayed, player)) {
-        declareWinner(player);
+        return true;
     } else if (gameFunctions.checkStraightWin(colPlayed, player)) {
-        declareWinner(player)
+        return true;
     }
 }
 
@@ -79,7 +79,11 @@ function playTurn(player) {
     let posPlayed = prompt(`Player: ${player.marker}, select a square`);
     if (gameBoard[posPlayed] === undefined) {
         gameBoard[posPlayed] = player.marker;
-        checkWin(player, posPlayed)
+        if (checkWin(player, posPlayed)) {
+            declareWinner(player);
+        } else {
+            nextRound();
+        }
     } else {
         alert("That square is taken");
         playTurn(player);
