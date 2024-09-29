@@ -1,4 +1,7 @@
 const gameFunctions = (function() {
+    const createPlayer = (marker) => {
+        return {marker}
+    }
     const checkStraightWin = (linePlayed, player) => {
         lineArr = [];
 
@@ -17,7 +20,6 @@ const gameFunctions = (function() {
         }
         if (lineArr.length === 3) {return true}
     }
-
     const checkDiagonalWin = (player) => {
         if (
             (gameBoard.a1 === player.marker && gameBoard.b2 === player.marker && gameBoard.c3 === player.marker)
@@ -27,43 +29,44 @@ const gameFunctions = (function() {
             return true;
         }
     }
-
-    return {checkStraightWin, checkDiagonalWin}
+    const declareWinner = (player, draw) => {
+        if (draw) {
+            console.log("It's a draw");
+            gameBoard = {
+                a1: undefined,
+                b1: undefined,
+                c1: undefined,
+                a2: undefined,
+                b2: undefined,
+                c2: undefined,
+                a3: undefined,
+                b3: undefined,
+                c3: undefined,
+            };
+            roundNo = 0;
+        } else {
+            console.log(`Player ${player.marker} won`);
+            gameBoard = {
+                a1: undefined,
+                b1: undefined,
+                c1: undefined,
+                a2: undefined,
+                b2: undefined,
+                c2: undefined,
+                a3: undefined,
+                b3: undefined,
+                c3: undefined,
+            };
+            roundNo = 0
+        }   
+    }
+    return {createPlayer, checkStraightWin, checkDiagonalWin, declareWinner};
 })()
 
-function createPlayer(marker) {
-    let score = 0
-    const getScore = () => score
-    const giveScore = () => score++
+const playerX = gameFunctions.createPlayer("X");
+const playerO = gameFunctions.createPlayer("O")
 
-    return {marker, getScore, giveScore}
-}
-const playerX = createPlayer("X");
-const playerO = createPlayer("O")
-
-function declareWinner(player, draw) {
-    if (draw) {
-        console.log("It's a draw");
-    } else {
-        console.log(`Player ${player.marker} won`);
-    }   
-}
-
-let roundNo = 0;
-function nextRound() {
-    if (roundNo === 9) {
-        declareWinner(undefined, true);
-    } else {
-        roundNo++;
-        if (roundNo % 2 === 0) {
-            playTurn(playerO)
-        } else {
-            playTurn(playerX)
-        }
-    }
-}
-
-const gameBoard = {
+let gameBoard = {
     a1: undefined,
     b1: undefined,
     c1: undefined,
@@ -73,6 +76,20 @@ const gameBoard = {
     a3: undefined,
     b3: undefined,
     c3: undefined,
+};
+
+let roundNo = 0;
+function nextRound() {
+    if (roundNo === 9) {
+        gameFunctions.declareWinner(undefined, true);
+    } else {
+        roundNo++;
+        if (roundNo % 2 === 0) {
+            playTurn(playerO)
+        } else {
+            playTurn(playerX)
+        }
+    }
 }
 
 function checkWin(player, posPlayed) {
@@ -90,7 +107,7 @@ function playTurn(player) {
     if (gameBoard[posPlayed] === undefined) {
         gameBoard[posPlayed] = player.marker;
         if (checkWin(player, posPlayed)) {
-            declareWinner(player);
+            gameFunctions.declareWinner(player);
         } else {
             nextRound();
         }
