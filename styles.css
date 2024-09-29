@@ -19,3 +19,65 @@ p, h1, h2, h3, h4, h5, h6 {
 input, button, textarea, select {
     font: inherit;
 }
+
+:root {
+  --default-padding: 2rem;
+  --main-color: #1e293b;
+  --cell-size: 8rem;
+}
+
+@font-face {
+  font-family: Roboto;
+  src: url(./fonts/Roboto-Regular.ttf);
+  font-weight: 400;
+}
+@font-face {
+  font-family: Roboto;
+  src: url(./fonts/Roboto-Medium.ttf);
+  font-weight: 500;
+}
+@font-face {
+  font-family: Roboto;
+  src: url(./fonts/Roboto-Black.ttf);
+  font-weight: 900;
+}
+
+body {
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--main-color);
+  font-family: Roboto;
+  font-size: 1rem;
+}
+
+header {
+  padding: var(--default-padding);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+h1 {
+  font-size: 2rem;
+  font-weight: 500;
+}
+
+#gameboard {
+  height: calc(3 * --cell-size);
+  width: calc(3 * --cell-size);
+  display: grid;
+  grid-template-columns: repeat(3, var(--cell-size));
+  grid-auto-rows: var(--cell-size);
+}
+.cell {
+  height: var(--cell-size);
+  width: var(--cell-size);
+  background-color: aquamarine;
+}
+
+footer {
+  padding: var(--default-padding);
+  text-align: center;
+}
