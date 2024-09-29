@@ -39,8 +39,8 @@ input, button, textarea, select {
 }
 @font-face {
   font-family: Roboto;
-  src: url(./fonts/Roboto-Black.ttf);
-  font-weight: 900;
+  src: url(./fonts/Roboto-Bold.ttf);
+  font-weight: 700;
 }
 
 body {
@@ -64,6 +64,9 @@ h1 {
   font-size: 2rem;
   font-weight: 500;
 }
+strong {
+  font-weight: 500;
+}
 
 #gameboard {
   height: calc(3 * --cell-size);
@@ -73,8 +76,13 @@ h1 {
   grid-auto-rows: var(--cell-size);
 }
 .cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   height: var(--cell-size);
   width: var(--cell-size);
+  font-weight: 700;
+  font-size: calc(0.75 * var(--cell-size));
 }
 .top {
   border-bottom: var(--cell-border-size) solid var(--main-color);
